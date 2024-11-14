@@ -25,13 +25,17 @@ public class UserRegisterService {
 		this.repository = repository;
 	}
 	
-	public UserRegisterResultDTO alterProfileName(User user, String profileName) {
+	public UserRegisterResultDTO alterProfileName(User user, String profileName) {		
 		
 		UserRegisterResultDTO resultDto = new UserRegisterResultDTO();		
 		
 		resultDto.setSucess(false);					
 		resultDto.setUserDto(null);
 		resultDto.getErro().add(UserRegisterErro.ALTER_PROFILE);		
+		
+		if(user == null || profileName == null) {
+			return resultDto;
+		}
 		
 		if(!user.getProfileName().equals(profileName)) {
 			
@@ -62,6 +66,28 @@ public class UserRegisterService {
 		
 	}
 	
+	public UserRegisterResultDTO alterProfileName(String username, String profileName) {
+		
+		Optional<User> userOp = repository.findByUsername(username);
+		
+		if(userOp.isPresent()) {
+			
+			return alterProfileName(userOp.get(), profileName);
+			
+		}else {
+			
+			UserRegisterResultDTO resultDto = new UserRegisterResultDTO();
+			
+			resultDto.setSucess(false);
+			resultDto.setUserDto(null);
+			resultDto.getErro().add(UserRegisterErro.ALTER_PROFILE);
+			
+			return resultDto;
+			
+		}
+		
+	}
+	
 	public UserRegisterResultDTO alterPassword(User user, String password){
 				
 		UserRegisterResultDTO resultDto = new UserRegisterResultDTO();		
@@ -69,6 +95,10 @@ public class UserRegisterService {
 		resultDto.setSucess(false);
 		resultDto.getErro().add(UserRegisterErro.ALTER_PASSWORD);
 		resultDto.setUserDto(null);
+		
+		if(user == null || password == null) {
+			return resultDto;
+		}
 		
 		if(!user.getPassword().equals(password)) {
 			
@@ -102,12 +132,38 @@ public class UserRegisterService {
 		
 	}
 	
+	public UserRegisterResultDTO alterPassword(String username, String password){
+		
+		Optional<User> userOp = repository.findByUsername(username);
+		
+		if(userOp.isPresent()) {
+			
+			return alterPassword(userOp.get(), password);
+			
+		}else {
+			
+			UserRegisterResultDTO resultDto = new UserRegisterResultDTO();
+			
+			resultDto.setSucess(false);
+			resultDto.setUserDto(null);
+			resultDto.getErro().add(UserRegisterErro.ALTER_PASSWORD);
+			
+			return resultDto;
+			
+		}
+		
+	}
+	
 	public UserRegisterResultDTO save(UserDTO dto, String password, String passwordConfirm) {
 		
 		UserRegisterResultDTO resultDto = new UserRegisterResultDTO();
 		
 		resultDto.setSucess(false);
 		resultDto.setUserDto(null);
+		
+		if(dto == null || dto.getUsername() == null || password == null || passwordConfirm == null) {
+			resultDto.getErro().add(UserRegisterErro.REGISTRATION_FAILED);
+		}
 		
 		Optional<User> userOp = repository.findByUsername(dto.getUsername());
 		
@@ -171,6 +227,28 @@ public class UserRegisterService {
 		}
 		
 		return resultDto;
+		
+	}
+	
+	public UserRegisterResultDTO delete(String username) {		
+		
+		Optional<User> userOp = repository.findByUsername(username);
+		
+		if(userOp.isPresent()) {
+			
+			return delete(userOp.get());
+			
+		}else {
+			
+			UserRegisterResultDTO resultDto = new UserRegisterResultDTO();
+			
+			resultDto.setSucess(false);
+			resultDto.setUserDto(null);
+			resultDto.getErro().add(UserRegisterErro.DELETION_FAILED);
+			
+			return resultDto;
+			
+		}
 		
 	}
 	
