@@ -3,6 +3,7 @@ package com.lmlasmo.genegisc.dto;
 import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.lmlasmo.genegisc.model.User;
 
 public class UserDTO {
 
@@ -14,6 +15,16 @@ public class UserDTO {
 	
 	@JsonProperty("birth_date")
 	private LocalDate birthDate;
+	
+	public UserDTO() {}
+	
+	public UserDTO(User user) {
+		
+		this.username = user.getUsername();
+		this.profileName = user.getProfileName();
+		this.birthDate = user.getBirthDate();
+		
+	}
 
 	public String getUsername() {
 		return username;
