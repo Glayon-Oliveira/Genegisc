@@ -41,7 +41,7 @@ public class UserService extends UserRegisterService{
 		return this.repository.findByBirthDateStartingFromYear(year);
 	}
 	
-	public Optional<UserDTO> toDTO(User user) {
+	public static Optional<UserDTO> toDTO(User user) {
 		
 		Optional<UserDTO> dtoOp = Optional.ofNullable(null);
 		
@@ -55,7 +55,7 @@ public class UserService extends UserRegisterService{
 		
 	}
 	
-	public List<UserDTO> toDTO(List<User> users) {
+	public static List<UserDTO> toDTO(List<User> users) {
 		
 		List<UserDTO> dtoList = users.stream()
 									 .filter(u -> verifyToDTO(u))
@@ -68,7 +68,7 @@ public class UserService extends UserRegisterService{
 		
 	}
 	
-	private boolean verifyToDTO(User user) {
+	private static boolean verifyToDTO(User user) {
 		
 		boolean cond = (user.getUsername() != null && user.getProfileName() != null && user.getPassword() != null);
 		
