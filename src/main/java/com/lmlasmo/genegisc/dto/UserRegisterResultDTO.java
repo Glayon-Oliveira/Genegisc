@@ -1,5 +1,6 @@
 package com.lmlasmo.genegisc.dto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -13,7 +14,7 @@ public class UserRegisterResultDTO {
 	private UserDTO userDto;
 	
 	@JsonProperty("erro_cause")
-	private List<UserRegisterErro> erro;
+	private List<UserRegisterErro> erro = new ArrayList<UserRegisterErro>();
 	
 	public UserRegisterResultDTO() {}
 
