@@ -1,5 +1,7 @@
 package com.lmlasmo.genegisc.service;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.lmlasmo.genegisc.dto.UserDTO;
+import com.lmlasmo.genegisc.dto.UserRegisterErro;
+import com.lmlasmo.genegisc.dto.UserRegisterResultDTO;
 import com.lmlasmo.genegisc.model.User;
 import com.lmlasmo.genegisc.repository.UserRepository;
 
@@ -21,71 +25,152 @@ public class UserRegisterService {
 		this.repository = repository;
 	}
 	
-	public Optional<User> alterProfileName(User user, String profileName) {
+	public UserRegisterResultDTO alterProfileName(User user, String profileName) {
 		
-		Optional<User> userOp = Optional.ofNullable(null);
+		UserRegisterResultDTO resultDto = new UserRegisterResultDTO();		
+		
+		resultDto.setSucess(false);					
+		resultDto.setUserDto(null);
+		resultDto.getErro().add(UserRegisterErro.ALTER_PROFILE);		
 		
 		if(!user.getProfileName().equals(profileName)) {
 			
 			user.setProfileName(profileName);
 			
-			userOp = Optional.ofNullable(repository.save(user));
+			Optional<User> userOp = Optional.ofNullable(repository.save(user));
 			
 			if(userOp.isPresent()) {
 				
 				if(!userOp.get().getProfileName().equals(profileName)) {					
 					userOp = Optional.ofNullable(null);
+				}else {
+					Optional<UserDTO> dtoOp = UserService.toDTO(userOp.get());
+					
+					if(dtoOp.isPresent()) {
+						resultDto.setSucess(true);
+						resultDto.setUserDto(dtoOp.get());					
+						resultDto.getErro().removeIf(e -> e.equals(UserRegisterErro.ALTER_PROFILE));
+					}
+					
 				}
 				
-			}						
+			}					
 			
 		}
 		
-		return userOp;
+		return resultDto;
 		
 	}
 	
-	public Optional<User> alterPassword(User user, String password){
+	public UserRegisterResultDTO alterPassword(User user, String password){
+				
+		UserRegisterResultDTO resultDto = new UserRegisterResultDTO();		
 		
-		Optional<User> userOp = Optional.ofNullable(null);
+		resultDto.setSucess(false);
+		resultDto.getErro().add(UserRegisterErro.ALTER_PASSWORD);
+		resultDto.setUserDto(null);
 		
 		if(!user.getPassword().equals(password)) {
 			
 			user.setPassword(password);
 			
-			userOp = Optional.ofNullable(repository.save(user));
+			Optional<User> userOp = Optional.ofNullable(repository.save(user));
 			
 			if(userOp.isPresent()) {
 				
 				if(userOp.get().getPassword().equals(password)) {
 					userOp = Optional.ofNullable(null);
+				}else {
+					
+					Optional<UserDTO> dtoOp = UserService.toDTO(userOp.get());
+					
+					if(dtoOp.isPresent()) {
+						
+						resultDto.setSucess(true);
+						resultDto.setUserDto(dtoOp.get());
+						resultDto.getErro().removeIf(e -> e.equals(UserRegisterErro.ALTER_PASSWORD));						
+						
+					}
+									
 				}
 				
 			}
 			
 		}
 		
-		return userOp;
+		return resultDto;
 		
 	}
 	
-	public Optional<User> save(UserDTO dto, String password) {
+	public UserRegisterResultDTO save(UserDTO dto, String password, String passwordConfirm) {
 		
-		User user = new User();
+		UserRegisterResultDTO resultDto = new UserRegisterResultDTO();
 		
-		user.setUsername(dto.getUsername());
-		user.setProfileName(dto.getProfileName());
-		user.setBirthDate(dto.getBirthDate());		
+		resultDto.setSucess(false);
+		resultDto.setUserDto(null);
 		
-		return Optional.ofNullable(repository.save(user));
+		Optional<User> userOp = repository.findByUsername(dto.getUsername());
+		
+		if(!userOp.isEmpty()) {
+			resultDto.getErro().add(UserRegisterErro.USERNAME_USE);
+		}
+		
+		if(!password.equals(passwordConfirm)) {
+			resultDto.getErro().add(UserRegisterErro.PASSWORD_CONFIRMED);
+		}
+		
+		if(resultDto.getErro().size() == 0) {
+			
+			User user = new User();		
+			
+			user.setUsername(dto.getUsername());
+			user.setProfileName(dto.getProfileName());
+			user.setBirthDate(dto.getBirthDate());
+			
+			userOp = Optional.ofNullable(repository.save(user));
+			
+			if(userOp.isPresent()) {				
+				
+				Optional<UserDTO> dtoOp = UserService.toDTO(userOp.get());
+				
+				if(dtoOp.isPresent()) {
+				
+					resultDto.setSucess(true);
+					resultDto.setUserDto(dtoOp.get());
+					
+				}
+				
+			}
+			
+			if(resultDto.isSucess()) {
+				resultDto.getErro().add(UserRegisterErro.REGISTRATION_FAILED);
+			}
+			
+		}		
+		
+		return resultDto;
 		
 	}
 	
-	public boolean delete(User user) {		
+	public UserRegisterResultDTO delete(User user) {		
+		
+		UserRegisterResultDTO resultDto = new UserRegisterResultDTO();		
+		resultDto.setUserDto(null);
 		
 		repository.delete(user);
 		
-		return repository.findById(user.getId()).isEmpty();
+		if(repository.findById(user.getId()).isEmpty()) {
+			
+			resultDto.setSucess(true);			
+			
+		}else {
+			
+			resultDto.setSucess(false);
+			resultDto.getErro().add(UserRegisterErro.DELETION_FAILED);			
+			
+		}
+		
+		return resultDto;
 		
 	}
 	
