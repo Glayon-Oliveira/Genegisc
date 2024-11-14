@@ -31,7 +31,7 @@ public class UserRegisterService {
 		
 		resultDto.setSucess(false);					
 		resultDto.setUserDto(null);
-		resultDto.getErro().add(UserRegisterErro.ALTER_PROFILE);		
+		resultDto.getErro().add(UserRegisterErro.ALTER_PROFILE_FAILED);		
 		
 		if(user == null || profileName == null) {
 			return resultDto;
@@ -53,7 +53,7 @@ public class UserRegisterService {
 					if(dtoOp.isPresent()) {
 						resultDto.setSucess(true);
 						resultDto.setUserDto(dtoOp.get());					
-						resultDto.getErro().removeIf(e -> e.equals(UserRegisterErro.ALTER_PROFILE));
+						resultDto.getErro().removeIf(e -> e.equals(UserRegisterErro.ALTER_PROFILE_FAILED));
 					}
 					
 				}
@@ -80,7 +80,7 @@ public class UserRegisterService {
 			
 			resultDto.setSucess(false);
 			resultDto.setUserDto(null);
-			resultDto.getErro().add(UserRegisterErro.ALTER_PROFILE);
+			resultDto.getErro().add(UserRegisterErro.ALTER_PROFILE_FAILED);
 			
 			return resultDto;
 			
@@ -93,7 +93,7 @@ public class UserRegisterService {
 		UserRegisterResultDTO resultDto = new UserRegisterResultDTO();		
 		
 		resultDto.setSucess(false);
-		resultDto.getErro().add(UserRegisterErro.ALTER_PASSWORD);
+		resultDto.getErro().add(UserRegisterErro.ALTER_PASSWORD_FAILED);
 		resultDto.setUserDto(null);
 		
 		if(user == null || password == null) {
@@ -118,7 +118,7 @@ public class UserRegisterService {
 						
 						resultDto.setSucess(true);
 						resultDto.setUserDto(dtoOp.get());
-						resultDto.getErro().removeIf(e -> e.equals(UserRegisterErro.ALTER_PASSWORD));						
+						resultDto.getErro().removeIf(e -> e.equals(UserRegisterErro.ALTER_PASSWORD_FAILED));						
 						
 					}
 									
@@ -146,7 +146,7 @@ public class UserRegisterService {
 			
 			resultDto.setSucess(false);
 			resultDto.setUserDto(null);
-			resultDto.getErro().add(UserRegisterErro.ALTER_PASSWORD);
+			resultDto.getErro().add(UserRegisterErro.ALTER_PASSWORD_FAILED);
 			
 			return resultDto;
 			
@@ -172,7 +172,7 @@ public class UserRegisterService {
 		}
 		
 		if(!password.equals(passwordConfirm)) {
-			resultDto.getErro().add(UserRegisterErro.PASSWORD_CONFIRMED);
+			resultDto.getErro().add(UserRegisterErro.PASSWORD_CONFIRMED_INCORRECT);
 		}
 		
 		if(resultDto.getErro().size() == 0) {
