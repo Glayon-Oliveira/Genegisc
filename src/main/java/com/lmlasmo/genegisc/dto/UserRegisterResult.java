@@ -1,10 +1,19 @@
 package com.lmlasmo.genegisc.dto;
 
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class UserRegisterResult {
 
+	@JsonProperty("sucess")
 	public boolean sucess;
 	
+	@JsonProperty("user")
 	public UserDTO userDto;
+	
+	@JsonProperty("erro_cause")
+	public List<UserRegisterErroCause> erro;
 	
 	public UserRegisterResult() {}
 
@@ -22,6 +31,14 @@ public class UserRegisterResult {
 
 	public void setUserDto(UserDTO userDto) {
 		this.userDto = userDto;
+	}
+
+	public List<UserRegisterErroCause> getErro() {
+		return erro;
+	}
+
+	public void setErro(List<UserRegisterErroCause> erro) {
+		this.erro = erro;
 	}	
 	
 }
