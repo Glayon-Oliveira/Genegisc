@@ -88,7 +88,7 @@ public class UserRegisterService {
 		
 	}
 	
-	public UserRegisterResultDTO alterPassword(User user, String password){
+	public UserRegisterResultDTO alterPassword(User user, String password, String passwordConfirm){
 				
 		UserRegisterResultDTO resultDto = new UserRegisterResultDTO();		
 		
@@ -96,11 +96,11 @@ public class UserRegisterService {
 		resultDto.getErro().add(UserRegisterErro.ALTER_PASSWORD_FAILED);
 		resultDto.setUserDto(null);
 		
-		if(user == null || password == null) {
+		if(user == null || password == null || passwordConfirm == null) {
 			return resultDto;
 		}
 		
-		if(!user.getPassword().equals(password)) {
+		if(!user.getPassword().equals(password) && !password.equals(passwordConfirm)) {
 			
 			user.setPassword(password);
 			
@@ -132,13 +132,13 @@ public class UserRegisterService {
 		
 	}
 	
-	public UserRegisterResultDTO alterPassword(String username, String password){
+	public UserRegisterResultDTO alterPassword(String username, String password, String passwordConfirm){
 		
 		Optional<User> userOp = repository.findByUsername(username);
 		
 		if(userOp.isPresent()) {
 			
-			return alterPassword(userOp.get(), password);
+			return alterPassword(userOp.get(), password, passwordConfirm);
 			
 		}else {
 			
