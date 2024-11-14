@@ -13,7 +13,7 @@ public class UserRegisterResultDTO {
 	private UserDTO userDto;
 	
 	@JsonProperty("erro_cause")
-	private List<UserRegisterErroCause> erro;
+	private List<UserRegisterErro> erro;
 	
 	public UserRegisterResultDTO() {}
 
@@ -33,11 +33,11 @@ public class UserRegisterResultDTO {
 		this.userDto = userDto;
 	}
 
-	public List<UserRegisterErroCause> getErro() {
+	public List<UserRegisterErro> getErro() {
 		return erro;
 	}
 
-	public void setErro(List<UserRegisterErroCause> erro) {
+	public void setErro(List<UserRegisterErro> erro) {
 		this.erro = erro;
 	}	
 	
