@@ -7,13 +7,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class UserRegisterResultDTO {
 
 	@JsonProperty("sucess")
-	public boolean sucess;
+	private boolean sucess;
 	
 	@JsonProperty("user")
-	public UserDTO userDto;
+	private UserDTO userDto;
 	
 	@JsonProperty("erro_cause")
-	public List<UserRegisterErroCause> erro;
+	private List<UserRegisterErroCause> erro;
 	
 	public UserRegisterResultDTO() {}
 
