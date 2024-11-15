@@ -6,12 +6,14 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.lmlasmo.genegisc.dto.UserDTO;
 import com.lmlasmo.genegisc.dto.UserSearchResultDTO;
 import com.lmlasmo.genegisc.model.User;
 import com.lmlasmo.genegisc.repository.UserRepository;
 
+@Service
 public class UserService extends UserRegisterService{
 	
 	@Autowired

@@ -2,6 +2,7 @@ package com.lmlasmo.genegisc.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,8 +20,8 @@ public class UserController {
 		this.userService = userService;
 	}
 	
-	@GetMapping("/${username}")
-	public UserSearchResultDTO getUserByUsername(@RequestParam String username) {
+	@GetMapping("/{username}")
+	public UserSearchResultDTO getUserByUsername(@PathVariable String username) {
 		
 		return userService.findByUsername(username);
 		

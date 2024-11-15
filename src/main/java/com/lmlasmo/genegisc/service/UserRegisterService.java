@@ -181,6 +181,7 @@ public class UserRegisterService {
 			
 			user.setUsername(dto.getUsername());
 			user.setProfileName(dto.getProfileName());
+			user.setPassword(password);
 			user.setBirthDate(dto.getBirthDate());
 			
 			userOp = Optional.ofNullable(repository.save(user));
@@ -198,7 +199,7 @@ public class UserRegisterService {
 				
 			}
 			
-			if(resultDto.isSucess()) {
+			if(!resultDto.isSucess()) {
 				resultDto.getErro().add(UserRegisterErro.REGISTRATION_FAILED);
 			}
 			
