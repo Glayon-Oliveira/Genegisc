@@ -1,5 +1,6 @@
 package com.lmlasmo.genegisc.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -7,6 +8,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.lmlasmo.genegisc.dto.UserDTO;
+import com.lmlasmo.genegisc.dto.UserSearchResultDTO;
 import com.lmlasmo.genegisc.model.User;
 import com.lmlasmo.genegisc.repository.UserRepository;
 
@@ -17,28 +19,154 @@ public class UserService extends UserRegisterService{
 		super(repository);
 	}
 	
-	public List<User> findAll(){
-		return this.repository.findAll();
+	public UserSearchResultDTO findAll(){
+		
+		List<User> userList = this.repository.findAll();
+		
+		List<UserDTO> dtoList = UserService.toDTO(userList);
+		
+		UserSearchResultDTO resultDto = new UserSearchResultDTO();
+		
+		if(dtoList.size() > 0) {
+			
+			resultDto.setSucess(true);
+			resultDto.setUser(dtoList);
+			
+		}else {
+			
+			resultDto.setSucess(false);
+			resultDto.setUser(null);
+			
+		}
+		
+		return resultDto;
+		
 	}
 	
-	public Optional<User> findByUsername(String username){
-		return this.repository.findByUsername(username);
+	public UserSearchResultDTO findByUsername(String username){
+
+		Optional<User> userOp = this.repository.findByUsername(username);
+		
+		UserSearchResultDTO resultDto = new UserSearchResultDTO();
+		
+		resultDto.setSucess(false);
+		
+		if(userOp.isPresent()) {
+			
+			Optional<UserDTO> dtoOp = UserService.toDTO(userOp.get());
+			
+			if(dtoOp.isPresent()) {
+				
+				UserDTO dto = dtoOp.get();
+				
+				List<UserDTO> dtoList = new ArrayList<UserDTO>();
+				dtoList.add(dto);
+				
+				resultDto.setSucess(true);
+				resultDto.setUser(dtoList);						
+				
+			}
+			
+		}		
+		
+		return resultDto;	
+		
 	}
 	
-	public List<User> findByProfileNameContaining(String profileName){
-		return this.repository.findByProfileNameContaining(profileName);
+	public UserSearchResultDTO findByProfileNameContaining(String profileName){		
+		
+		List<User> userList = this.repository.findByProfileNameContaining(profileName);
+		
+		List<UserDTO> dtoList = UserService.toDTO(userList);
+		
+		UserSearchResultDTO resultDto = new UserSearchResultDTO();
+		
+		if(dtoList.size() > 0) {
+			
+			resultDto.setSucess(true);
+			resultDto.setUser(dtoList);
+			
+		}else {
+			
+			resultDto.setSucess(false);
+			resultDto.setUser(null);
+			
+		}
+		
+		return resultDto;		
+		
 	}
 	
-	public List<User> findByBirthYear(int year){
-		return this.repository.findByBirthYear(year);
+	public UserSearchResultDTO findByBirthYear(int year){		
+		
+		List<User> userList = this.repository.findByBirthYear(year);
+		
+		List<UserDTO> dtoList = UserService.toDTO(userList);
+		
+		UserSearchResultDTO resultDto = new UserSearchResultDTO();
+		
+		if(dtoList.size() > 0) {
+			
+			resultDto.setSucess(true);
+			resultDto.setUser(dtoList);
+			
+		}else {
+			
+			resultDto.setSucess(false);
+			resultDto.setUser(null);
+			
+		}
+		
+		return resultDto;	
+		
 	}
 	
-	public List<User> findByBirthMount(int mount){
-		return this.repository.findByBirthMount(mount);
+	public UserSearchResultDTO findByBirthMount(int mount){		
+		
+		List<User> userList = this.repository.findByBirthMount(mount);
+		
+		List<UserDTO> dtoList = UserService.toDTO(userList);
+		
+		UserSearchResultDTO resultDto = new UserSearchResultDTO();
+		
+		if(dtoList.size() > 0) {
+			
+			resultDto.setSucess(true);
+			resultDto.setUser(dtoList);
+			
+		}else {
+			
+			resultDto.setSucess(false);
+			resultDto.setUser(null);
+			
+		}
+		
+		return resultDto;	
+		
 	}
 	
-	public List<User> findByBirthDateStartingFromYear(int year){
-		return this.repository.findByBirthDateStartingFromYear(year);
+	public UserSearchResultDTO findByBirthDateStartingFromYear(int year){		
+		
+		List<User> userList = this.repository.findByBirthDateStartingFromYear(year);
+		
+		List<UserDTO> dtoList = UserService.toDTO(userList);
+		
+		UserSearchResultDTO resultDto = new UserSearchResultDTO();
+		
+		if(dtoList.size() > 0) {
+			
+			resultDto.setSucess(true);
+			resultDto.setUser(dtoList);
+			
+		}else {
+			
+			resultDto.setSucess(false);
+			resultDto.setUser(null);
+			
+		}
+		
+		return resultDto;	
+		
 	}
 	
 	public static Optional<UserDTO> toDTO(User user) {
